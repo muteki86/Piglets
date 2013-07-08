@@ -1,7 +1,10 @@
 __author__ = 'antdev102'
 
 import os
+import random
+
 import pygame
+
 
 if not pygame.font: print 'Warning, fonts disabled'
 if not pygame.mixer: print 'Warning, sound disabled'
@@ -73,7 +76,7 @@ class Chimp(pygame.sprite.Sprite):
         self.image, self.rect = load_image('chimp.bmp', -1)
         screen = pygame.display.get_surface()
         self.area = screen.get_rect()
-        self.rect.topleft = 10, 10
+        self.rect.topleft = random.randint(0, 400), 10
         self.move = 9
         self.dizzy = 0
 
@@ -145,8 +148,11 @@ def main():
     whiff_sound = load_sound('whiff.wav')
     punch_sound = load_sound('punch.wav')
     chimp = Chimp()
+    chimp2 = Chimp()
+    chimp3 = Chimp()
     fist = Fist()
-    allsprites = pygame.sprite.RenderPlain((fist, chimp))
+    allsprites = pygame.sprite.RenderPlain((fist, chimp, chimp2, chimp3))
+
 
     #Main Loop
     while 1:
@@ -163,7 +169,15 @@ def main():
                     punch_sound.play() #punch
                     chimp.punched()
                 else:
-                    whiff_sound.play() #miss
+                    if fist.punch(chimp2):
+                        punch_sound.play() #punch
+                        chimp2.punched()
+                    else:
+                        if fist.punch(chimp3):
+                            punch_sound.play() #punch
+                            chimp3.punched()
+                        else:
+                            whiff_sound.play() #miss
             elif event.type is pygame.MOUSEBUTTONUP:
                 fist.unpunch()
 
