@@ -9,16 +9,16 @@ namespace MonoPiglets
     /// </summary>
     public class Piglets : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        GraphicsDeviceManager _graphics;
+        SpriteBatch _spriteBatch;
 
-        private PigEntity pig1;
+        private readonly PigEntity _pig1;
 
         public Piglets()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            pig1 = new PigEntity();
+            _pig1 = new PigEntity();
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace MonoPiglets
             Vector2 pigPos = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X,
                 GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height/2);
 
-            pig1.Position = pigPos;
+            _pig1.Position = pigPos;
         }
 
         /// <summary>
@@ -46,10 +46,10 @@ namespace MonoPiglets
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            pig1.LoadSprites(Content);
+            _pig1.LoadSprites(Content);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace MonoPiglets
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            pig1.Update();
+            _pig1.Update();
             
 
             base.Update(gameTime);
@@ -89,11 +89,11 @@ namespace MonoPiglets
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
-            spriteBatch.Begin();
+            _spriteBatch.Begin();
 
-            pig1.Draw(spriteBatch);
+            _pig1.Draw(_spriteBatch);
 
-            spriteBatch.End();
+            _spriteBatch.End();
         }
     }
 }
