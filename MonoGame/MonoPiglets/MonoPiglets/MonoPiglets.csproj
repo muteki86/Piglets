@@ -51,6 +51,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\ptipo1_down.png" />
+    <Content Include="Content\ptipo1_left.png" />
+    <Content Include="Content\ptipo1_right.png" />
+    <Content Include="Content\ptipo1_up.png" />
+    <Content Include="Content\ptipo2_down.png" />
+    <Content Include="Content\ptipo2_left.png" />
+    <Content Include="Content\ptipo2_right.png" />
+    <Content Include="Content\ptipo2_up.png" />
+    <Content Include="Content\ptipo3_down.png" />
+    <Content Include="Content\ptipo3_left.png" />
+    <Content Include="Content\ptipo3_right.png" />
+    <Content Include="Content\ptipo3_up.png" />
     <Content Include="Content\ptipo4_down.png" />
     <Content Include="Content\ptipo4_left.png" />
     <Content Include="Content\ptipo4_right.png" />

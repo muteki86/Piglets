@@ -1,4 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -12,13 +15,17 @@ namespace MonoPiglets
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
 
-        private readonly PigEntity _pig1;
+        private List<PigEntity> _pigs;
 
         public Piglets()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            _pig1 = new PigEntity();
+            _pigs = new List<PigEntity>();
+            foreach (var i in Enumerable.Range(0, 10))
+            {
+                _pigs.Add(new PigEntity());
+            }
         }
 
         /// <summary>
@@ -33,10 +40,16 @@ namespace MonoPiglets
 
             base.Initialize();
 
-            Vector2 pigPos = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X,
-                GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height/2);
+            Random rnd = new Random();
 
-            _pig1.Position = pigPos;
+            foreach (var pigEntity in _pigs)
+            {
+                Vector2 pigPos = new Vector2(rnd.Next(0, GraphicsDevice.Viewport.TitleSafeArea.Right),
+                    rnd.Next(0, GraphicsDevice.Viewport.TitleSafeArea.Bottom));
+
+                pigEntity.Position = pigPos;
+                pigEntity.PigViewPort = GraphicsDevice.Viewport;
+            }
         }
 
         /// <summary>
@@ -49,7 +62,7 @@ namespace MonoPiglets
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            _pig1.LoadSprites(Content);
+            _pigs.ForEach(x => x.LoadSprites(Content));
         }
 
         /// <summary>
@@ -72,8 +85,19 @@ namespace MonoPiglets
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            _pig1.Update();
-            
+            if (Mouse.GetState(Window).LeftButton == ButtonState.Pressed)
+            {
+                var newPig = new PigEntity();
+                newPig.LoadSprites(Content);
+
+                Vector2 pigPos = new Vector2(Mouse.GetState(Window).X, Mouse.GetState(Window).Y);
+
+                newPig.Position = pigPos;
+                newPig.PigViewPort = GraphicsDevice.Viewport;
+                _pigs.Add(newPig);
+            }
+
+            _pigs.ForEach(x => x.Update(gameTime));
 
             base.Update(gameTime);
         }
@@ -84,14 +108,14 @@ namespace MonoPiglets
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.ForestGreen);
 
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
             _spriteBatch.Begin();
 
-            _pig1.Draw(_spriteBatch);
+            _pigs.ForEach(x => x.Draw(_spriteBatch));
 
             _spriteBatch.End();
         }
