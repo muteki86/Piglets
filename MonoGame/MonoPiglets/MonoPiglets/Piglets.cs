@@ -16,6 +16,7 @@ namespace MonoPiglets
         SpriteBatch _spriteBatch;
 
         private List<PigEntity> _pigs;
+        private TerrainEntity _terrain;
 
         public Piglets()
         {
@@ -26,6 +27,9 @@ namespace MonoPiglets
             {
                 _pigs.Add(new PigEntity());
             }
+            _terrain = new TerrainEntity();
+
+
         }
 
         /// <summary>
@@ -50,6 +54,10 @@ namespace MonoPiglets
                 pigEntity.Position = pigPos;
                 pigEntity.PigViewPort = GraphicsDevice.Viewport;
             }
+
+            _terrain.X = GraphicsDevice.Viewport.TitleSafeArea.Right / 5;
+            _terrain.Y = GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
+            _terrain.Initialize();
         }
 
         /// <summary>
