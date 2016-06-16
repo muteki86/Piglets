@@ -53,14 +53,13 @@ namespace MonoPiglets
             terrainArray[0, Y - 1] = _random.Next(0, _maxHeight);
             terrainArray[X - 1, Y - 1] = _random.Next(0, _maxHeight);
 
-            DiamondStep(terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1));
+            DiamondStep(terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1), 3);
 
         }
 
-        private void DiamondStep(int[,] terrain, Point topLeft, Point topRight, Point bottomLeft, Point bottonRight)
+        private void DiamondStep(int[,] terrain, Point topLeft, Point topRight, Point bottomLeft, Point bottonRight, int maxRandom)
         {
             var sideLength = bottomLeft.X - topLeft.X;
-
             var halfSideLength = sideLength / 2;
 
             if (sideLength >= 2)
@@ -70,7 +69,7 @@ namespace MonoPiglets
                               terrain[topRight.X, topRight.Y] +
                               terrain[bottomLeft.X, bottomLeft.Y] +
                               terrain[bottonRight.X, bottonRight.Y]) /
-                             4 + _random.Next(-3, 3);
+                             4 + _random.Next(0, maxRandom);
 
                 // top center
                 terrain[topLeft.X, halfSideLength + topLeft.Y] = (
@@ -78,7 +77,7 @@ namespace MonoPiglets
                     + terrain[topLeft.X, topRight.Y]
                     + terrain[topLeft.X + halfSideLength, topLeft.Y + halfSideLength]
                     + terrain[topLeft.X, halfSideLength + topLeft.Y]
-                    ) / 4 + _random.Next(-3, 3);
+                    ) / 4 + _random.Next(0, maxRandom);
 
                 //// left center
                 terrain[halfSideLength + topLeft.X, topLeft.Y] = (
@@ -86,7 +85,7 @@ namespace MonoPiglets
                             + terrain[bottomLeft.X, bottomLeft.Y]
                             + terrain[topLeft.X + halfSideLength, topLeft.Y + halfSideLength]
                             + terrain[halfSideLength + topLeft.X, topLeft.Y]
-                            ) / 4 + _random.Next(-3, 3);
+                            ) / 4 + _random.Next(0, maxRandom);
 
                 //// right center
                 terrain[halfSideLength + topLeft.X, bottonRight.Y] = (
@@ -94,7 +93,7 @@ namespace MonoPiglets
                             + terrain[bottonRight.X, bottonRight.Y]
                             + terrain[topLeft.X + halfSideLength, topLeft.Y + halfSideLength]
                             + terrain[halfSideLength + topLeft.X, bottonRight.Y]
-                            ) / 4 + _random.Next(-3, 3);
+                            ) / 4 + _random.Next(0, maxRandom);
 
                 //// bottom center
                 terrain[bottomLeft.X, halfSideLength + topLeft.Y] = (
@@ -102,15 +101,17 @@ namespace MonoPiglets
                             + terrain[bottomLeft.X, bottomLeft.Y]
                             + terrain[topLeft.X + halfSideLength, topLeft.Y + halfSideLength]
                             + terrain[bottomLeft.X, halfSideLength + topLeft.Y]
-                            ) / 4 + _random.Next(-3, 3);
+                            ) / 4 + _random.Next(0, maxRandom);
 
-                DiamondStep(terrain, topLeft, new Point(topLeft.X, topRight.Y / 2), new Point(bottomLeft.X / 2, topLeft.Y), new Point(bottomLeft.X / 2, bottonRight.Y / 2));
+                var newRandom = (maxRandom - 1) == 0 ? 1 : (maxRandom - 1);
 
-                DiamondStep(terrain, new Point(topLeft.X, topRight.Y / 2), topRight, new Point(bottomLeft.X / 2, bottonRight.Y / 2), new Point(bottomLeft.X / 2, topRight.Y));
+                DiamondStep(terrain, topLeft, new Point(topLeft.X, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y), new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), newRandom);
 
-                //DiamondStep(terrain, new Point(bottomLeft.X / 2, topRight.Y), new Point(bottomLeft.X / 2, bottonRight.Y / 2), bottomLeft, new Point(topLeft.X, bottonRight.Y / 2));	
+                DiamondStep(terrain, new Point(topLeft.X, topLeft.Y + halfSideLength), topRight, new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y + sideLength), newRandom);
 
-                //DiamondStep(terrain, new Point(bottomLeft.X / 2, bottonRight.Y / 2), new Point(bottomLeft.X / 2, topRight.Y), new Point(topLeft.X, bottonRight.Y / 2), bottonRight);
+                DiamondStep(terrain, new Point(topLeft.X + halfSideLength, topLeft.Y), new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), bottomLeft, new Point(topLeft.X + sideLength, topLeft.Y + halfSideLength), newRandom);
+
+                DiamondStep(terrain, new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y + sideLength), new Point(topLeft.X + sideLength, topLeft.Y + halfSideLength), bottonRight, newRandom);
 
             }
 
