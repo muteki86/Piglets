@@ -68,6 +68,12 @@
     <Content Include="Content\ptipo4_left.png" />
     <Content Include="Content\ptipo4_right.png" />
     <Content Include="Content\ptipo4_up.png" />
+    <Content Include="Content\terrain0.png" />
+    <Content Include="Content\terrain1.png" />
+    <Content Include="Content\terrain2.png" />
+    <Content Include="Content\terrain3.png" />
+    <Content Include="Content\terrain4.png" />
+    <Content Include="Content\terrain5.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

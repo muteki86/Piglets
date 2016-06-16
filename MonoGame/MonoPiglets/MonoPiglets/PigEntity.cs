@@ -38,7 +38,6 @@ namespace MonoPiglets
 
         public void LoadSprites(ContentManager content)
         {
-            
             var newModifier = _random.Next(0, 4);
 
             switch (newModifier)

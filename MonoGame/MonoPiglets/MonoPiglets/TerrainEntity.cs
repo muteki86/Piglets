@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -16,10 +17,14 @@ namespace MonoPiglets
 
         private readonly Random _random;
 
+        private List<Texture2D> _textures;
+
+        private int[,] _terrainArray;
+
         public TerrainEntity()
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
-
+            _textures = new List<Texture2D>();
         }
 
         public void Initialize()
@@ -29,8 +34,12 @@ namespace MonoPiglets
 
         public void LoadSprites(ContentManager content)
         {
-
-
+            _textures.Add(content.Load<Texture2D>("terrain0"));
+            _textures.Add(content.Load<Texture2D>("terrain1"));
+            _textures.Add(content.Load<Texture2D>("terrain2"));
+            _textures.Add(content.Load<Texture2D>("terrain3"));
+            _textures.Add(content.Load<Texture2D>("terrain4"));
+            _textures.Add(content.Load<Texture2D>("terrain5"));
         }
 
         public void Update(GameTime gameTime)
@@ -40,20 +49,33 @@ namespace MonoPiglets
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            int width = _terrainArray.GetLength(0);
+            int height = _terrainArray.GetLength(1);
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int k = 0; k < height; k++)
+                {
+                    var point = new Vector2(i * 5, k * 5);
+
+                    var value = _terrainArray[i, k] > 5 ? 5 : _terrainArray[i, k];
+
+                    spriteBatch.Draw(_textures[value], point);
+                }
+            }
         }
 
         private void CreateNewHeightDistribution()
         {
-            // crear array
-            var terrainArray = new int[X, Y];
+            _terrainArray = new int[X, Y];
 
             // set up initial values
-            terrainArray[0, 0] = _random.Next(0, _maxHeight);
-            terrainArray[X - 1, 0] = _random.Next(0, _maxHeight);
-            terrainArray[0, Y - 1] = _random.Next(0, _maxHeight);
-            terrainArray[X - 1, Y - 1] = _random.Next(0, _maxHeight);
+            _terrainArray[0, 0] = _random.Next(0, _maxHeight);
+            _terrainArray[X - 1, 0] = _random.Next(0, _maxHeight/2);
+            _terrainArray[0, Y - 1] = _random.Next(0, _maxHeight);
+            _terrainArray[X - 1, Y - 1] = _random.Next(0, _maxHeight/2);
 
-            DiamondStep(terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1), 3);
+            DiamondStep(_terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1), 3);
 
         }
 
@@ -106,11 +128,8 @@ namespace MonoPiglets
                 var newRandom = (maxRandom - 1) == 0 ? 1 : (maxRandom - 1);
 
                 DiamondStep(terrain, topLeft, new Point(topLeft.X, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y), new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), newRandom);
-
                 DiamondStep(terrain, new Point(topLeft.X, topLeft.Y + halfSideLength), topRight, new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y + sideLength), newRandom);
-
                 DiamondStep(terrain, new Point(topLeft.X + halfSideLength, topLeft.Y), new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), bottomLeft, new Point(topLeft.X + sideLength, topLeft.Y + halfSideLength), newRandom);
-
                 DiamondStep(terrain, new Point(topLeft.X + halfSideLength, topLeft.Y + halfSideLength), new Point(topLeft.X + halfSideLength, topLeft.Y + sideLength), new Point(topLeft.X + sideLength, topLeft.Y + halfSideLength), bottonRight, newRandom);
 
             }

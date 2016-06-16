@@ -21,6 +21,10 @@ namespace MonoPiglets
         public Piglets()
         {
             _graphics = new GraphicsDeviceManager(this);
+
+            _graphics.PreferredBackBufferHeight = 645;
+            _graphics.PreferredBackBufferWidth = 645;
+
             Content.RootDirectory = "Content";
             _pigs = new List<PigEntity>();
             foreach (var i in Enumerable.Range(0, 10))
@@ -43,8 +47,9 @@ namespace MonoPiglets
             // TODO: Add your initialization logic here
 
             base.Initialize();
-
+            
             Random rnd = new Random();
+            //GraphicsDevice.Viewport.TitleSafeArea.
 
             foreach (var pigEntity in _pigs)
             {
@@ -55,8 +60,8 @@ namespace MonoPiglets
                 pigEntity.PigViewPort = GraphicsDevice.Viewport;
             }
 
-            _terrain.X = GraphicsDevice.Viewport.TitleSafeArea.Right / 5;
-            _terrain.Y = GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
+            _terrain.X = 129;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
+            _terrain.Y = 129;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
             _terrain.Initialize();
         }
 
@@ -68,6 +73,8 @@ namespace MonoPiglets
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            _terrain.LoadSprites(Content);
 
             // TODO: use this.Content to load your game content here
             _pigs.ForEach(x => x.LoadSprites(Content));
@@ -122,6 +129,8 @@ namespace MonoPiglets
 
             base.Draw(gameTime);
             _spriteBatch.Begin();
+
+            _terrain.Draw(_spriteBatch);
 
             _pigs.ForEach(x => x.Draw(_spriteBatch));
 
