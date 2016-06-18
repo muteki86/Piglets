@@ -74,6 +74,7 @@
     <Content Include="Content\terrain3.png" />
     <Content Include="Content\terrain4.png" />
     <Content Include="Content\terrain5.png" />
+    <Content Include="Content\terrain6.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>

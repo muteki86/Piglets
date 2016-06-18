@@ -60,8 +60,8 @@ namespace MonoPiglets
                 pigEntity.PigViewPort = GraphicsDevice.Viewport;
             }
 
-            _terrain.X = 129;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
-            _terrain.Y = 129;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
+            _terrain.X = 65;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
+            _terrain.Y = 65;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
             _terrain.Initialize();
         }
 
@@ -97,23 +97,28 @@ namespace MonoPiglets
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            if (Mouse.GetState(Window).LeftButton == ButtonState.Pressed)
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
+                Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                var newPig = new PigEntity();
-                newPig.LoadSprites(Content);
-
-                Vector2 pigPos = new Vector2(Mouse.GetState(Window).X, Mouse.GetState(Window).Y);
-
-                newPig.Position = pigPos;
-                newPig.PigViewPort = GraphicsDevice.Viewport;
-                _pigs.Add(newPig);
+                Exit();
             }
+            else
+            {
 
-            _pigs.ForEach(x => x.Update(gameTime));
+                if (Mouse.GetState(Window).LeftButton == ButtonState.Pressed)
+                {
+                    var newPig = new PigEntity();
+                    newPig.LoadSprites(Content);
 
+                    Vector2 pigPos = new Vector2(Mouse.GetState(Window).X, Mouse.GetState(Window).Y);
+
+                    newPig.Position = pigPos;
+                    newPig.PigViewPort = GraphicsDevice.Viewport;
+                    _pigs.Add(newPig);
+                }
+
+                _pigs.ForEach(x => x.Update(gameTime));
+            }
             base.Update(gameTime);
         }
 
