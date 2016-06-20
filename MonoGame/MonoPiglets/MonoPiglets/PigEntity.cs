@@ -28,6 +28,8 @@ namespace MonoPiglets
 
         private readonly Random _random;
 
+        private SpriteFont font;
+
         public PigEntity()
         {
             Sprites = new List<Texture2D>();
@@ -38,6 +40,8 @@ namespace MonoPiglets
 
         public void LoadSprites(ContentManager content)
         {
+            font = content.Load<SpriteFont>("MainFontSmall");
+
             var newModifier = _random.Next(0, 4);
 
             switch (newModifier)
@@ -69,39 +73,57 @@ namespace MonoPiglets
             }
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, TerrainEntity currentTerrain)
         {
             if (_elapsedMilliseconds > _nextUpdateTicks)
             {
                 Direction = _random.Next(0, 4);
 
                 var newModifier = _random.Next(5, 35);
+
+                TerrainInfo terrainInfo;
+
+                var newX = 0;
+                var newY = 0;
+
                 switch (Direction)
                 {
                     case 0: // right
-                        if (_position.X + newModifier < PigViewPort.TitleSafeArea.Right)
+                        newX = (int) (_position.X + newModifier);
+                        terrainInfo = currentTerrain.GetTerrainInfo(newX, (int) _position.Y);
+
+                        if (terrainInfo.IsValidForPig)
                         {
-                            _position.X += newModifier;
+                            _position.X = newX - terrainInfo.Height;
                         }
 
                         break;
                     case 1: // left
-                        if (_position.X - newModifier > PigViewPort.TitleSafeArea.Left)
+
+                        newX = (int) (_position.X - newModifier);
+                        terrainInfo = currentTerrain.GetTerrainInfo(newX, (int)_position.Y);
+                        if (terrainInfo.IsValidForPig)
                         {
-                            _position.X -= newModifier;
+                            _position.X -= newModifier - terrainInfo.Height;
                         }
                         break;
                     case 2: // up
-                        if (_position.Y - newModifier > PigViewPort.TitleSafeArea.Top)
+                        newY = (int) (_position.Y - newModifier);
+
+                        terrainInfo = currentTerrain.GetTerrainInfo((int) Position.X, newY);
+                        if (terrainInfo.IsValidForPig)
                         {
-                            _position.Y -= newModifier;
+                            _position.Y -= newModifier - terrainInfo.Height;
                         }
 
                         break;
                     case 3: // down
-                        if (_position.Y + newModifier < PigViewPort.TitleSafeArea.Bottom)
+
+                        newY = (int)(_position.Y + newModifier);
+                        terrainInfo = currentTerrain.GetTerrainInfo((int)Position.X, newY);
+                        if (terrainInfo.IsValidForPig)
                         {
-                            _position.Y += newModifier;
+                            _position.Y += newModifier - terrainInfo.Height;
                         }
                         break;
                 }
@@ -116,6 +138,8 @@ namespace MonoPiglets
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Sprites[Direction], Position);
+
+            spriteBatch.DrawString(font, $"{Position.X}, {Position.Y}", new Vector2(Position.X-10, Position.Y-10), Color.Black);
         }
     }
 }

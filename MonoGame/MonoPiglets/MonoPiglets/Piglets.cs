@@ -16,14 +16,24 @@ namespace MonoPiglets
         SpriteBatch _spriteBatch;
 
         private List<PigEntity> _pigs;
+
         private TerrainEntity _terrain;
+
+        private int _elapsedMilliseconds;
+
+        private Texture2D _mouseTexture;
+
+        private float _mouseX;
+
+        private float _mouseY;
 
         public Piglets()
         {
-            _graphics = new GraphicsDeviceManager(this);
-
-            _graphics.PreferredBackBufferHeight = 645;
-            _graphics.PreferredBackBufferWidth = 645;
+            _graphics = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferHeight = 650,
+                PreferredBackBufferWidth = 800
+            };
 
             Content.RootDirectory = "Content";
             _pigs = new List<PigEntity>();
@@ -32,8 +42,6 @@ namespace MonoPiglets
                 _pigs.Add(new PigEntity());
             }
             _terrain = new TerrainEntity();
-
-
         }
 
         /// <summary>
@@ -44,25 +52,33 @@ namespace MonoPiglets
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
-            
+
+            _mouseTexture = Content.Load<Texture2D>("mouse");
+
             Random rnd = new Random();
             //GraphicsDevice.Viewport.TitleSafeArea.
-
-            foreach (var pigEntity in _pigs)
-            {
-                Vector2 pigPos = new Vector2(rnd.Next(0, GraphicsDevice.Viewport.TitleSafeArea.Right),
-                    rnd.Next(0, GraphicsDevice.Viewport.TitleSafeArea.Bottom));
-
-                pigEntity.Position = pigPos;
-                pigEntity.PigViewPort = GraphicsDevice.Viewport;
-            }
 
             _terrain.X = 65;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
             _terrain.Y = 65;//GraphicsDevice.Viewport.TitleSafeArea.Bottom / 5;
             _terrain.Initialize();
+
+            foreach (var pigEntity in _pigs)
+            {
+                var terrainInfo = new TerrainInfo { IsValidForPig = false };
+
+                Vector2 pigPos = new Vector2();
+                while (!terrainInfo.IsValidForPig)
+                {
+                    pigPos = new Vector2(rnd.Next(0, 645),
+                       rnd.Next(0, 645));
+
+                    terrainInfo = _terrain.GetTerrainInfo((int)pigPos.X, (int)pigPos.Y);
+                }
+                pigEntity.Position = pigPos;
+                pigEntity.PigViewPort = GraphicsDevice.Viewport;
+            }
         }
 
         /// <summary>
@@ -104,20 +120,30 @@ namespace MonoPiglets
             }
             else
             {
-
-                if (Mouse.GetState(Window).LeftButton == ButtonState.Pressed)
+                if (Mouse.GetState(Window).LeftButton == ButtonState.Pressed && _elapsedMilliseconds > 200)
                 {
-                    var newPig = new PigEntity();
-                    newPig.LoadSprites(Content);
+                    var pigPos = new Vector2(Mouse.GetState(Window).X, Mouse.GetState(Window).Y);
+                    var terrainInfo = _terrain.GetTerrainInfo((int)pigPos.X, (int)pigPos.Y);
 
-                    Vector2 pigPos = new Vector2(Mouse.GetState(Window).X, Mouse.GetState(Window).Y);
-
-                    newPig.Position = pigPos;
-                    newPig.PigViewPort = GraphicsDevice.Viewport;
-                    _pigs.Add(newPig);
+                    if (terrainInfo.IsValidForPig)
+                    {
+                        var newPig = new PigEntity();
+                        newPig.LoadSprites(Content);
+                        newPig.Position = pigPos;
+                        newPig.PigViewPort = GraphicsDevice.Viewport;
+                        _pigs.Add(newPig);
+                        _elapsedMilliseconds = 0;
+                    }
+                }
+                else
+                {
+                    _elapsedMilliseconds += gameTime.ElapsedGameTime.Milliseconds;
                 }
 
-                _pigs.ForEach(x => x.Update(gameTime));
+                _mouseX = Mouse.GetState(Window).X;
+                _mouseY = Mouse.GetState(Window).Y;
+
+                _pigs.ForEach(x => x.Update(gameTime, _terrain));
             }
             base.Update(gameTime);
         }
@@ -128,9 +154,7 @@ namespace MonoPiglets
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.ForestGreen);
-
-            // TODO: Add your drawing code here
+            GraphicsDevice.Clear(Color.Beige);
 
             base.Draw(gameTime);
             _spriteBatch.Begin();
@@ -138,6 +162,8 @@ namespace MonoPiglets
             _terrain.Draw(_spriteBatch);
 
             _pigs.ForEach(x => x.Draw(_spriteBatch));
+
+            _spriteBatch.Draw(_mouseTexture, new Vector2(_mouseX, _mouseY));
 
             _spriteBatch.End();
         }

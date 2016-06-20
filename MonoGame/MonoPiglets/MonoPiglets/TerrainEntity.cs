@@ -21,6 +21,8 @@ namespace MonoPiglets
 
         private int[,] _terrainArray;
 
+        private SpriteFont font;
+
         public TerrainEntity()
         {
             _random = new Random(Guid.NewGuid().GetHashCode());
@@ -34,6 +36,8 @@ namespace MonoPiglets
 
         public void LoadSprites(ContentManager content)
         {
+            font = content.Load<SpriteFont>("MainFontSmall");
+
             _textures.Add(content.Load<Texture2D>("terrain0"));
             _textures.Add(content.Load<Texture2D>("terrain1"));
             _textures.Add(content.Load<Texture2D>("terrain2"));
@@ -63,8 +67,37 @@ namespace MonoPiglets
                     value = value < 0 ? 6 : value;
 
                     spriteBatch.Draw(_textures[value], point);
+                    if (i%3 == 0 && k%3 == 0)
+                    {
+                        var wat = _terrainArray[i, k];
+
+                        spriteBatch.DrawString(font, $"{value}", point, Color.Black);
+                    }
                 }
             }
+            
+        }
+
+        public TerrainInfo GetTerrainInfo(int x, int y)
+        {
+            var result = new TerrainInfo
+            {
+                X = (x/10),
+                Y = (y/10)
+            };
+            
+            if ( result.X+1 >= X || result.Y+1 >= Y || result.X < 0 || result.Y < 0 )
+            {
+                result.IsValidForPig = false;
+            }
+            else
+            {
+                result.Height = _terrainArray[result.X, result.Y]/5 ;
+
+                result.IsValidForPig = result.Height >= 0;
+            }
+
+            return result;
         }
 
         private void CreateNewHeightDistribution()
@@ -72,12 +105,12 @@ namespace MonoPiglets
             _terrainArray = new int[X, Y];
 
             // set up initial values
-            _terrainArray[0, 0] = _random.Next(0, _maxHeight);
-            _terrainArray[X - 1, 0] = _random.Next(-_maxHeight, _maxHeight);
-            _terrainArray[0, Y - 1] = _random.Next(-_maxHeight, _maxHeight);
+            _terrainArray[0, 0] = _random.Next(_maxHeight/2, _maxHeight*2);
+            _terrainArray[X - 1, 0] = _random.Next(-_maxHeight, _maxHeight/2);
+            _terrainArray[0, Y - 1] = _random.Next(-_maxHeight, _maxHeight/2);
             _terrainArray[X - 1, Y - 1] = _random.Next(0, _maxHeight);
 
-            DiamondStep(_terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1), 5);
+            DiamondStep(_terrainArray, new Point(0, 0), new Point(0, Y - 1), new Point(X - 1, 0), new Point(X - 1, Y - 1), 4);
 
         }
 
