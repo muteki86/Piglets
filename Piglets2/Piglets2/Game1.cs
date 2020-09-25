@@ -13,6 +13,7 @@ namespace Piglets2
         private SpriteBatch _spriteBatch;
 
         private EntityManager _manager;
+        private Camera _camera;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -26,7 +27,12 @@ namespace Piglets2
             _graphics.PreferredBackBufferWidth = 800;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = 400;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             _graphics.ApplyChanges();
-            
+
+            _camera = Camera.GetInstance();
+            _camera.X = 0;
+            _camera.Y = 0;
+            _camera.W = 800;
+            _camera.H = 400;
         }
 
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)
