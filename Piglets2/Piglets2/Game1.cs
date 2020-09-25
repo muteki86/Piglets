@@ -48,8 +48,17 @@ namespace Piglets2
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-        
-            // TODO: use this.Content to load your game content here
+
+            var mapTexture = Content.Load<Texture2D>("tiles/terrain");
+            var mapgen = new Map { 
+                Manager = _manager,
+                SpriteBatch = _spriteBatch,
+                Scale = 1,
+                TileSize = 32,
+                MapTextures = mapTexture
+            };
+            mapgen.LoadMap(null, 65,65);
+
             var player = new Entity();
             var ballTexture = Content.Load<Texture2D>("images/chopper-spritesheet");
             var transform = new TransformComponent
@@ -57,32 +66,32 @@ namespace Piglets2
                 Height = 32,
                 Width = 32,
                 Position =  new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2),
-                Speed = 500f
+                Speed = 300f
             };
             player.AddComponent(transform);
             
             var dani = new Animation
             {
                 Index = 0,
-                Speed = 90,
+                Speed = 60,
                 NumFrames = 2
             };
             var rani = new Animation
             {
                 Index = 1,
-                Speed = 90,
+                Speed = 60,
                 NumFrames = 2
             };
             var lani = new Animation
             {
                 Index = 2,
-                Speed = 90,
+                Speed = 60,
                 NumFrames = 2
             };
             var uani = new Animation
             {
                 Index = 3,
-                Speed = 90,
+                Speed = 60,
                 NumFrames = 2
             };
 

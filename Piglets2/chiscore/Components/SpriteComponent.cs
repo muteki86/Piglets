@@ -10,23 +10,17 @@ namespace chiscore.Components
         public Texture2D Texture { get; set; }
         public float Scale { get; set; }
         public TransformComponent Transform { get; set; }
-        
         public bool IsAnimated { get; set; }
-        
         public bool HasOrientation { get; set; }
-        
         public Dictionary<string, Animation> Animations { get; set; }
         public string DefaultAnimation { get; set; }
-
         private Animation _curAnimation;
-
         private Rectangle _srcRect;
         
         public SpriteComponent()
         {
             _srcRect = new Rectangle();
         }
-        
         
         public void Draw()
         {
@@ -50,7 +44,6 @@ namespace chiscore.Components
 
         public void Update(GameTime gameTime)
         {
-            this.Transform = Transform;
             var newX = Transform.Width *
                        ((gameTime.TotalGameTime.Milliseconds / _curAnimation.Speed) % _curAnimation.NumFrames);
             var newY = _curAnimation.Index * Transform.Height;
