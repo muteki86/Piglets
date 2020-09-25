@@ -31,5 +31,10 @@ namespace chiscore
         {
             _components.Add(component);
         }
+
+        public void Initialize()
+        {
+            _components.ForEach(c=>c.Initialize());
+        }
     }
 }

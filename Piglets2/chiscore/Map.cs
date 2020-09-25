@@ -1,3 +1,4 @@
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace chiscore
@@ -12,12 +13,12 @@ namespace chiscore
         
         public EntityManager Manager { get; set; }
 
-        public void LoadMap()
+        public void LoadMap(string filePath, int mapsizeX, int mapsizeY)
         {
             
         }
 
-        private void LoadTile()
+        private void LoadTile(Rectangle rect)
         {
             
         }

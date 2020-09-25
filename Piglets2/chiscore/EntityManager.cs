@@ -27,5 +27,10 @@ namespace chiscore
         {
             _entities.ForEach(ent=> ent.Draw());
         }
+
+        public void Initialize()
+        {
+            _entities.ForEach(x=>x.Initialize());
+        }
     }
 }

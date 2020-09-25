@@ -8,6 +8,8 @@ namespace chiscore.Components
         public TransformComponent Transform { get; set; }
         
         public GraphicsDeviceManager Graphics { get; set; }
+
+        public SpriteComponent SpriteComponent { get; set; }
         
         public void Draw()
         {
@@ -22,21 +24,25 @@ namespace chiscore.Components
 
             if (kstate.IsKeyDown(Keys.Up))
             {
-                Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y - Transform.Speed*deltatime);   
+                Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y - Transform.Speed*deltatime);
+                SpriteComponent.SetAnimation("up");
             }
             if (kstate.IsKeyDown(Keys.Down))
             {
                 Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y + Transform.Speed*deltatime);
+                SpriteComponent.SetAnimation("down");
             }
 
             if (kstate.IsKeyDown(Keys.Left))
             {
                 Transform.Position = new Vector2(Transform.Position.X - Transform.Speed*deltatime, Transform.Position.Y);
+                SpriteComponent.SetAnimation("left");
             }
 
             if (kstate.IsKeyDown(Keys.Right))
             {
                 Transform.Position = new Vector2(Transform.Position.X + Transform.Speed*deltatime, Transform.Position.Y);
+                SpriteComponent.SetAnimation("right");
             }
 
             if (Transform.Position.X > Graphics.PreferredBackBufferWidth - Transform.Width / 2)
