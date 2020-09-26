@@ -6,12 +6,15 @@ namespace chiscore.Components
     public class TileComponent : Component
     {
         public int TileSize { get; set; }
+
         public int Scale { get; set; }
+
         public Vector2 Position { get; set; }
 
         public Rectangle srcRect { get; set; }
 
         public Texture2D Texture { get; set; }
+
         public SpriteBatch SpriteBatch { get; set; }
         
         public void Draw()

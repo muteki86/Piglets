@@ -24,27 +24,46 @@ namespace chiscore.Components
 
             if (kstate.IsKeyDown(Keys.Up))
             {
-                Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y - Transform.Speed*deltatime);
+                Transform.Speed = new Vector2(0, -40);
+                //Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y - Transform.Speed*deltatime);
                 SpriteComponent.SetAnimation("up");
             }
             if (kstate.IsKeyDown(Keys.Down))
             {
-                Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y + Transform.Speed*deltatime);
+                //Transform.Position = new Vector2(Transform.Position.X, Transform.Position.Y + Transform.Speed*deltatime);
+                Transform.Speed = new Vector2(0, 40);
                 SpriteComponent.SetAnimation("down");
             }
 
             if (kstate.IsKeyDown(Keys.Left))
             {
-                Transform.Position = new Vector2(Transform.Position.X - Transform.Speed*deltatime, Transform.Position.Y);
+                //Transform.Position = new Vector2(Transform.Position.X - Transform.Speed*deltatime, Transform.Position.Y);
+                Transform.Speed = new Vector2(-40, 0);
                 SpriteComponent.SetAnimation("left");
             }
 
             if (kstate.IsKeyDown(Keys.Right))
             {
-                Transform.Position = new Vector2(Transform.Position.X + Transform.Speed*deltatime, Transform.Position.Y);
+                //Transform.Position = new Vector2(Transform.Position.X + Transform.Speed*deltatime, Transform.Position.Y);
+                Transform.Speed = new Vector2(40, 0);
                 SpriteComponent.SetAnimation("right");
             }
-            
+            if (kstate.IsKeyUp(Keys.Up))
+            {
+                Transform.Speed = new Vector2(0, 0);
+            }
+            if (kstate.IsKeyUp(Keys.Down))
+            {
+                Transform.Speed = new Vector2(0, 0);
+            }
+            if (kstate.IsKeyUp(Keys.Left))
+            {
+                Transform.Speed = new Vector2(0, 0);
+            }
+            if (kstate.IsKeyUp(Keys.Right))
+            {
+                Transform.Speed = new Vector2(0, 0);
+            }
             /*
             if (Transform.Position.X > Graphics.PreferredBackBufferWidth - Transform.Width / 2)
             {

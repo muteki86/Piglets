@@ -15,23 +15,23 @@ namespace Piglets2
         private EntityManager _manager;
         private Camera _camera;
         private Entity _player;
-        private int WINDOW_WIDTH = 400;
-        private int WINDOW_HEIGHT = 400;
+        private int WINDOW_WIDTH ;
+        private int WINDOW_HEIGHT ;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            //IsMouseVisible = true;
             //this.Window.AllowUserResizing = true;
             //_graphics.IsFullScreen = true;
 
             //Window.ClientSizeChanged+=Window_ClientSizeChanged;
-            WINDOW_WIDTH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            WINDOW_HEIGHT = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            
-            _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;//;
-            _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            WINDOW_WIDTH = Window.ClientBounds.Width;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            WINDOW_HEIGHT = Window.ClientBounds.Height;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+            //_graphics.PreferredBackBufferWidth = WINDOW_WIDTH;//;
+            //_graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             //_graphics.ApplyChanges();
 
             _camera = Camera.GetInstance();
@@ -49,7 +49,6 @@ namespace Piglets2
             
             Camera.GetInstance().X = newx;
             Camera.GetInstance().Y = newy;
-            
             
             Camera.GetInstance().X = Camera.GetInstance().X < 0 ? 0 : Camera.GetInstance().X;
             Camera.GetInstance().Y = Camera.GetInstance().Y < 0 ? 0 : Camera.GetInstance().Y;
@@ -95,7 +94,7 @@ namespace Piglets2
                 Height = 32,
                 Width = 32,
                 Position =  new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
-                Speed = 100f
+                Speed = new Vector2(0,0)
             };
             _player.AddComponent(transform);
             

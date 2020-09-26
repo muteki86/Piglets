@@ -7,8 +7,8 @@ namespace chiscore
 {
     public class Camera
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public float X { get; set; }
+        public float Y { get; set; }
         public int W { get; set; }
         public int H { get; set; }
 
