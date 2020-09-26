@@ -44,7 +44,8 @@ namespace chiscore.Components
                 Transform.Position = new Vector2(Transform.Position.X + Transform.Speed*deltatime, Transform.Position.Y);
                 SpriteComponent.SetAnimation("right");
             }
-
+            
+            /*
             if (Transform.Position.X > Graphics.PreferredBackBufferWidth - Transform.Width / 2)
             {
                 Transform.Position = new Vector2(Graphics.PreferredBackBufferWidth - Transform.Width / 2, Transform.Position.Y);
@@ -61,7 +62,7 @@ namespace chiscore.Components
             else if (Transform.Position.Y < Transform.Height / 2)
             {
                 Transform.Position = new Vector2(Transform.Position.X, Transform.Height / 2);
-            }
+            }*/
         }
 
         public void Initialize()

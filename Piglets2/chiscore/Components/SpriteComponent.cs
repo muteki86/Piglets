@@ -12,10 +12,12 @@ namespace chiscore.Components
         public TransformComponent Transform { get; set; }
         public bool IsAnimated { get; set; }
         public bool HasOrientation { get; set; }
+        public bool IsFixed { get; set; }
         public Dictionary<string, Animation> Animations { get; set; }
         public string DefaultAnimation { get; set; }
         private Animation _curAnimation;
         private Rectangle _srcRect;
+        private Vector2 _position;
         
         public SpriteComponent()
         {
@@ -24,9 +26,10 @@ namespace chiscore.Components
         
         public void Draw()
         {
+            
             SpriteBatch.Draw(
                     Texture,
-                    Transform.Position,
+                    _position,
                     _srcRect,
                     Color.White,
                     0f,
@@ -48,6 +51,10 @@ namespace chiscore.Components
                        ((gameTime.TotalGameTime.Milliseconds / _curAnimation.Speed) % _curAnimation.NumFrames);
             var newY = _curAnimation.Index * Transform.Height;
             _srcRect = new Rectangle {X = newX, Y = newY, Height = Transform.Height, Width = Transform.Width};
+            
+            var newX1 = Transform.Position.X - (IsFixed ? 0 : Camera.GetInstance().X);
+            var newY2 = Transform.Position.Y - (IsFixed ? 0 : Camera.GetInstance().Y);
+            _position = new Vector2(newX1, newY2);
         }
 
         public void SetAnimation(string anikey)

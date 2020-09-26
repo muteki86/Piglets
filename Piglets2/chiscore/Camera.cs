@@ -20,11 +20,7 @@ namespace chiscore
 
         public static Camera GetInstance()
         {
-            if (_instance == null)
-            {
-                return new Camera();
-            }
-            return _instance;
+            return _instance ?? (_instance = new Camera());
         }
 
     }

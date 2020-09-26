@@ -14,6 +14,10 @@ namespace Piglets2
 
         private EntityManager _manager;
         private Camera _camera;
+        private Entity _player;
+        private int WINDOW_WIDTH = 400;
+        private int WINDOW_HEIGHT = 400;
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -22,19 +26,38 @@ namespace Piglets2
             //this.Window.AllowUserResizing = true;
             //_graphics.IsFullScreen = true;
 
-            Window.ClientSizeChanged+=Window_ClientSizeChanged;
-
-            _graphics.PreferredBackBufferWidth = 800;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            _graphics.PreferredBackBufferHeight = 400;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.ApplyChanges();
+            //Window.ClientSizeChanged+=Window_ClientSizeChanged;
+            WINDOW_WIDTH = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            WINDOW_HEIGHT = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            
+            _graphics.PreferredBackBufferWidth = WINDOW_WIDTH;//;
+            _graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            //_graphics.ApplyChanges();
 
             _camera = Camera.GetInstance();
             _camera.X = 0;
             _camera.Y = 0;
-            _camera.W = 800;
-            _camera.H = 400;
+            _camera.W = WINDOW_WIDTH;
+            _camera.H = WINDOW_HEIGHT;
         }
 
+        private void HandleCamera()
+        {
+            TransformComponent playerTransform = (TransformComponent) _player.GetComponent(typeof(TransformComponent));
+            var newx = (int) (playerTransform.Position.X - (WINDOW_WIDTH / 2));
+            var newy = (int) (playerTransform.Position.Y - (WINDOW_HEIGHT / 2));
+            
+            Camera.GetInstance().X = newx;
+            Camera.GetInstance().Y = newy;
+            
+            
+            Camera.GetInstance().X = Camera.GetInstance().X < 0 ? 0 : Camera.GetInstance().X;
+            Camera.GetInstance().Y = Camera.GetInstance().Y < 0 ? 0 : Camera.GetInstance().Y;
+            Camera.GetInstance().X = Camera.GetInstance().X > Camera.GetInstance().W ? Camera.GetInstance().W : Camera.GetInstance().X;
+            Camera.GetInstance().Y = Camera.GetInstance().Y > Camera.GetInstance().H ? Camera.GetInstance().H : Camera.GetInstance().Y;
+            
+        }
+        
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)
         {
             Window.ClientSizeChanged -= Window_ClientSizeChanged;
@@ -63,18 +86,18 @@ namespace Piglets2
                 TileSize = 32,
                 MapTextures = mapTexture
             };
-            mapgen.LoadMap(null, 65,65);
+            mapgen.LoadMap(null, 100,100);
 
-            var player = new Entity();
+            _player = new Entity();
             var ballTexture = Content.Load<Texture2D>("images/chopper-spritesheet");
             var transform = new TransformComponent
             {
                 Height = 32,
                 Width = 32,
-                Position =  new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2),
-                Speed = 300f
+                Position =  new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
+                Speed = 100f
             };
-            player.AddComponent(transform);
+            _player.AddComponent(transform);
             
             var dani = new Animation
             {
@@ -117,16 +140,17 @@ namespace Piglets2
                 SpriteBatch = _spriteBatch,
                 IsAnimated = true,
                 Animations = animations,
-                DefaultAnimation = "down"
+                DefaultAnimation = "down",
+                IsFixed = false
             };
-            player.AddComponent(spriteCmp);
-            player.AddComponent(new KeyboardComponent
+            _player.AddComponent(spriteCmp);
+            _player.AddComponent(new KeyboardComponent
             {
                 Graphics = _graphics,
                 Transform = transform,
                 SpriteComponent = spriteCmp
             });
-            _manager.AddEntity(player);
+            _manager.AddEntity(_player);
             
             _manager.Initialize();
         }
@@ -136,6 +160,7 @@ namespace Piglets2
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             _manager.Update(gameTime);
+            HandleCamera();
             base.Update(gameTime);
         }
 

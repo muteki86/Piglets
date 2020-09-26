@@ -32,7 +32,9 @@ namespace chiscore.Components
 
         public void Update(GameTime gameTime)
         {
-            //todo figure out camera
+            var newx = Position.X - Camera.GetInstance().X;
+            var newy = Position.Y - Camera.GetInstance().Y;
+            Position = new Vector2(newx, newy);
         }
 
         public void Initialize()

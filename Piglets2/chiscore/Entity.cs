@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using chiscore.Components;
 using Microsoft.Xna.Framework;
 
@@ -30,6 +32,11 @@ namespace chiscore
         public void AddComponent(Component component)
         {
             _components.Add(component);
+        }
+
+        public Component GetComponent(Type type)
+        {
+            return _components.FirstOrDefault(x => x.GetType() == type);
         }
 
         public void Initialize()
