@@ -50,11 +50,11 @@ namespace Piglets2
             Camera.GetInstance().X = newx;
             Camera.GetInstance().Y = newy;
             
-            Camera.GetInstance().X = Camera.GetInstance().X < 0 ? 0 : Camera.GetInstance().X;
+            /*Camera.GetInstance().X = Camera.GetInstance().X < 0 ? 0 : Camera.GetInstance().X;
             Camera.GetInstance().Y = Camera.GetInstance().Y < 0 ? 0 : Camera.GetInstance().Y;
             Camera.GetInstance().X = Camera.GetInstance().X > Camera.GetInstance().W ? Camera.GetInstance().W : Camera.GetInstance().X;
             Camera.GetInstance().Y = Camera.GetInstance().Y > Camera.GetInstance().H ? Camera.GetInstance().H : Camera.GetInstance().Y;
-            
+            */
         }
         
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)
@@ -94,7 +94,7 @@ namespace Piglets2
                 Height = 32,
                 Width = 32,
                 Position =  new Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2),
-                Speed = new Vector2(0,0)
+                Speed = 100//new Vector2(0,0)
             };
             _player.AddComponent(transform);
             

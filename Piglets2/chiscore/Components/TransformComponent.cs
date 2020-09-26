@@ -6,7 +6,7 @@ namespace chiscore.Components
     {
         public Vector2 Position { get; set; }
 
-        public Vector2 Speed { get; set; }
+        public int Speed { get; set; }
 
         public int Width { get; set; }
 
@@ -20,7 +20,8 @@ namespace chiscore.Components
         public void Update(GameTime gameTime)
         {
             //Position += Speed;
-            Position = new Vector2((float)(Position.X + Speed.X * gameTime.ElapsedGameTime.TotalSeconds), (float)(Position.Y + Speed.Y * gameTime.ElapsedGameTime.TotalSeconds));
+            /*Position = new Vector2((float)(Position.X + Speed.X * gameTime.ElapsedGameTime.TotalSeconds),
+                (float)(Position.Y + Speed.Y * gameTime.ElapsedGameTime.TotalSeconds));*/
         }
 
         public void Initialize()

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -25,7 +26,7 @@ namespace chiscore.Components
                 srcRect,
                 Color.White,
                 0f,
-                new Vector2(srcRect.Width/ 2, srcRect.Height/ 2),
+                new Vector2(TileSize / 2, TileSize / 2),
                 /*Position,*/
                 Scale,
                 SpriteEffects.None,
@@ -35,9 +36,9 @@ namespace chiscore.Components
 
         public void Update(GameTime gameTime)
         {
-            var newx = Position.X - Camera.GetInstance().X;
-            var newy = Position.Y - Camera.GetInstance().Y;
-            Position = new Vector2(newx, newy);
+            var newx = Position.X - Camera.GetInstance().X * gameTime.ElapsedGameTime.TotalSeconds;
+            var newy = Position.Y - Camera.GetInstance().Y * gameTime.ElapsedGameTime.TotalSeconds;
+            Position = new Vector2((float)newx, (float)newy);
         }
 
         public void Initialize()
