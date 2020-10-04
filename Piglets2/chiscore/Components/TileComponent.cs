@@ -36,9 +36,9 @@ namespace chiscore.Components
 
         public void Update(GameTime gameTime)
         {
-            var newx = Position.X - Camera.GetInstance().X * gameTime.ElapsedGameTime.TotalSeconds;
+            /*var newx = Position.X - Camera.GetInstance().X * gameTime.ElapsedGameTime.TotalSeconds;
             var newy = Position.Y - Camera.GetInstance().Y * gameTime.ElapsedGameTime.TotalSeconds;
-            Position = new Vector2((float)newx, (float)newy);
+            Position = new Vector2((float)newx, (float)newy);*/
         }
 
         public void Initialize()

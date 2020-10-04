@@ -20,7 +20,7 @@ namespace chiscore.Components
         {
             var kstate = Keyboard.GetState();
             
-            var deltatime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var deltatime = (float)gameTime.ElapsedGameTime.TotalSeconds;//.TotalSeconds;
 
             var speed = 100;
 

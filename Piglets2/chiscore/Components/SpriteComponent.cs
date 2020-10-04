@@ -52,9 +52,9 @@ namespace chiscore.Components
             var newY = _curAnimation.Index * Transform.Height;
             _srcRect = new Rectangle {X = newX, Y = newY, Height = Transform.Height, Width = Transform.Width};
             
-            var newX1 = Transform.Position.X - (IsFixed ? 0 : Camera.GetInstance().X);
-            var newY2 = Transform.Position.Y - (IsFixed ? 0 : Camera.GetInstance().Y);
-            _position = new Vector2(newX1, newY2);
+            /*var newX1 = Transform.Position.X - (IsFixed ? 0 : Camera.GetInstance().X);
+            var newY2 = Transform.Position.Y - (IsFixed ? 0 : Camera.GetInstance().Y);*/
+            _position = new Vector2(newX, newY);
         }
 
         public void SetAnimation(string anikey)

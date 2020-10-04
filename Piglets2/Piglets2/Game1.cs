@@ -33,29 +33,15 @@ namespace Piglets2
             //_graphics.PreferredBackBufferWidth = WINDOW_WIDTH;//;
             //_graphics.PreferredBackBufferHeight = WINDOW_HEIGHT;//GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             //_graphics.ApplyChanges();
-
-            _camera = Camera.GetInstance();
+            
+            /*_camera = Camera.GetInstance();
             _camera.X = 0;
             _camera.Y = 0;
             _camera.W = WINDOW_WIDTH;
             _camera.H = WINDOW_HEIGHT;
-        }
-
-        private void HandleCamera()
-        {
-            TransformComponent playerTransform = (TransformComponent) _player.GetComponent(typeof(TransformComponent));
-            var newx = (int) (playerTransform.Position.X - (WINDOW_WIDTH / 2));
-            var newy = (int) (playerTransform.Position.Y - (WINDOW_HEIGHT / 2));
-            
-            Camera.GetInstance().X = newx;
-            Camera.GetInstance().Y = newy;
-            
-            /*Camera.GetInstance().X = Camera.GetInstance().X < 0 ? 0 : Camera.GetInstance().X;
-            Camera.GetInstance().Y = Camera.GetInstance().Y < 0 ? 0 : Camera.GetInstance().Y;
-            Camera.GetInstance().X = Camera.GetInstance().X > Camera.GetInstance().W ? Camera.GetInstance().W : Camera.GetInstance().X;
-            Camera.GetInstance().Y = Camera.GetInstance().Y > Camera.GetInstance().H ? Camera.GetInstance().H : Camera.GetInstance().Y;
             */
         }
+
         
         private void Window_ClientSizeChanged(object sender, System.EventArgs e)
         {
@@ -71,6 +57,7 @@ namespace Piglets2
         {
             // TODO: Add your initialization logic here
             _manager = new EntityManager();
+            _camera  = new Camera(GraphicsDevice.Viewport);
             base.Initialize();
         }
         protected override void LoadContent()
@@ -158,15 +145,16 @@ namespace Piglets2
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            _camera.UpdateCamera(GraphicsDevice.Viewport);
             _manager.Update(gameTime);
-            HandleCamera();
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null,
+                _camera.Transform);
             _manager.Draw();
             _spriteBatch.End();
             base.Draw(gameTime);
